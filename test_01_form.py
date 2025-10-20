@@ -9,14 +9,15 @@ def test_form_validation():
     try:
         driver = webdriver.Edge()
         wait = WebDriverWait(driver, 15)
-        
-        driver.get("https://bonigarcia.dev/selenium-webdriver-java/data-types.html")
-        
+
+        url = "https://bonigarcia.dev/selenium-webdriver-java/data-types.html"
+        driver.get(url)
+
         wait.until(EC.presence_of_element_located((By.TAG_NAME, "form")))
-        
+
         test_data = {
             "first-name": "Иван",
-            "last-name": "Петров", 
+            "last-name": "Петров",
             "address": "Ленина, 55-3",
             "e-mail": "test@skypro.com",
             "phone": "+7985899998787",
@@ -26,7 +27,7 @@ def test_form_validation():
             "job-position": "QA",
             "company": "SkyPro"
         }
-        
+
         for field_name, value in test_data.items():
             try:
                 field = driver.find_element(By.NAME, field_name)
@@ -36,14 +37,18 @@ def test_form_validation():
             except Exception as e:
                 print(f"Ошибка при заполнении поля {field_name}: {e}")
                 continue
-        
+
         try:
-            submit_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[type='submit']")))
+            submit_btn = wait.until(
+                EC.element_to_be_clickable(
+                    (By.CSS_SELECTOR, "button[type='submit']")
+                )
+            )
             submit_btn.click()
         except Exception as e:
             print(f"Ошибка при нажатии кнопки: {e}")
             return
-        
+
         try:
             wait.until(EC.url_contains("submitted"))
             assert "data-types-submitted.html" in driver.current_url
@@ -56,7 +61,6 @@ def test_form_validation():
                 print("Форма не была отправлена")
             else:
                 print("Произошел переход на неизвестную страницу")
-            
     except Exception as e:
         print(f"Общая ошибка теста: {e}")
         raise
